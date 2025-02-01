@@ -2,7 +2,6 @@ import json
 from http.server import BaseHTTPRequestHandler
 import urllib.parse
 
-# List of student marks as dictionaries
 student_marks = [
     {"name": "hPZTeg", "marks": 33},
     {"name": "ucIF7L", "marks": 60},
@@ -49,7 +48,6 @@ student_marks = [
     {"name": "P4zH", "marks": 63},
     {"name": "2ql3p", "marks": 34},
     {"name": "Qmh", "marks": 85},
-    {"name": "s", "marks": 66},
     {"name": "7O", "marks": 51},
     {"name": "uINS", "marks": 56},
     {"name": "wN5lTe8", "marks": 85},
@@ -103,25 +101,15 @@ student_marks = [
     {"name": "aI", "marks": 70},
     {"name": "SBQzXYmNl", "marks": 27},
     {"name": "p", "marks": 56},
-    {"name": "5PfZp", "marks": 14},
+    {"name": "5PfZp", "marks": 14}
 ]
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Parse the query parameters
         query_components = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
         names = query_components.get("name", [])
-
-        # Search for marks by name
-        marks = [
-            next((student["marks"] for student in student_marks if student["name"] == name), "Not Found")
-            for name in names
-        ]
-
-        # Create the response JSON
+        marks = [next((student["marks"] for student in student_marks if student["name"] == name), "Not Found") for name in names]
         response = {"marks": marks}
-
-        # Send the response
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
